@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2010 Rajendra Patil
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	jaxb:version="2.0" 
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jaxb:extensionBindingPrefixes="xjc"
+	elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:appinfo>
+		    <jaxb:globalBindings>
+		        <jaxb:javaType name="java.util.Date" xmlType="xs:date"
+                    parseMethod="com.googlecode.slideshare4j.util.SlideShare4jUtils.parseDate"
+                    printMethod="com.googlecode.slideshare4j.util.SlideShare4jUtils.printDate"/>
+		        <jaxb:javaType name="java.lang.Boolean" xmlType="xs:boolean"
+                    parseMethod="com.googlecode.slideshare4j.util.SlideShare4jUtils.parseBoolean"
+                    printMethod="com.googlecode.slideshare4j.util.SlideShare4jUtils.printBoolean"/>  
+		    </jaxb:globalBindings>
+		    <!--<jaxb:schemaBindings>
+	            <jaxb:nameXmlTransform>
+					<jaxb:typeName prefix="XML"/>
+					<jaxb:anonymousTypeName prefix="XML"/>
+				</jaxb:nameXmlTransform>
+        	</jaxb:schemaBindings>-->
+	  	</xs:appinfo>
+  	</xs:annotation>
+	<xs:element name="SlideShowIsFavorite" type="SlideShowIsFavorite"/>
+	<xs:element name="SlideshowsByGroup" type="SlideshowsByGroup"/>
+	<xs:element name="Slideshows" type="Slideshows"/>
+	<xs:element name="SlideshowsByTag" type="SlideshowsByTag"/>
+	<xs:element name="SlideShowEdited" type="SlideShowEdited"/>
+	<xs:element name="SlideshowsByUser" type="SlideshowsByUser"/>
+	<xs:element name="SlideShowFavorited" type="SlideShowFavorited"/>
+	<xs:element name="SlideShowDeleted" type="SlideShowDeleted"/>
+	<xs:element name="Contacts" type="Contacts"/>
+	<xs:element name="Tags" type="Tags"/>
+	<xs:element name="Groups" type="Groups"/>
+	<xs:element name="Slideshow" type="Slideshow"/>
+	<xs:element name="SlideShareServiceError" type="SlideShareServiceError" />
+	<xs:element name="SlideShowUploaded" type="SlideShowUploaded"/>
+	
+  	<xs:simpleType name="conversionStatus">
+	    <xs:annotation>
+	      <xs:appinfo>
+	        <jaxb:typesafeEnumClass>
+	            <jaxb:typesafeEnumMember value="0" name="QUEUED" />
+	            <jaxb:typesafeEnumMember value="1" name="CONVERTING" />
+	            <jaxb:typesafeEnumMember value="2" name="CONVERTED" />
+	            <jaxb:typesafeEnumMember value="3" name="FAILED" />
+	        </jaxb:typesafeEnumClass>
+	      </xs:appinfo>
+	    </xs:annotation>
+	    <xs:restriction base="xs:int">
+	      <xs:enumeration value="0" />
+	      <xs:enumeration value="1" />
+	      <xs:enumeration value="2" />
+	      <xs:enumeration value="3" />
+	    </xs:restriction>
+  	</xs:simpleType>
+  
+  	<xs:simpleType name="slideshowFormat">
+	    <xs:annotation>
+	      <xs:appinfo>
+	        <jaxb:typesafeEnumClass>
+	            <jaxb:typesafeEnumMember value="pdf" name="PDF" />
+	            <jaxb:typesafeEnumMember value="ppt" name="PPT" />
+	            <jaxb:typesafeEnumMember value="pps" name="PPS" />
+	            <jaxb:typesafeEnumMember value="odp" name="ODP" />
+	            <jaxb:typesafeEnumMember value="doc" name="DOC" />
+	            <jaxb:typesafeEnumMember value="pot" name="POT" />
+	            <jaxb:typesafeEnumMember value="txt" name="TXT" />
+	            <jaxb:typesafeEnumMember value="rdf" name="RDF" />
+	        </jaxb:typesafeEnumClass>
+	      </xs:appinfo>
+	    </xs:annotation>
+	    <xs:restriction base="xs:string">
+	      <xs:enumeration value="pdf" />
+	      <xs:enumeration value="ppt" />
+	      <xs:enumeration value="pps" />
+	      <xs:enumeration value="odp" />
+	      <xs:enumeration value="doc" />
+	      <xs:enumeration value="pot" />
+	      <xs:enumeration value="txt" />
+	      <xs:enumeration value="rdf" />
+	    </xs:restriction>
+  	</xs:simpleType>
+  	
+  	<xs:simpleType name="slideshowType">
+	    <xs:annotation>
+	      <xs:appinfo>
+	        <jaxb:typesafeEnumClass>
+	            <jaxb:typesafeEnumMember value="0" name="PRESENTATION" />
+	            <jaxb:typesafeEnumMember value="1" name="DOCUMENT" />
+	            <jaxb:typesafeEnumMember value="2" name="PORTFOLIO" />
+	            <jaxb:typesafeEnumMember value="3" name="VIDEO" />
+	        </jaxb:typesafeEnumClass>
+	      </xs:appinfo>
+	    </xs:annotation>
+	    <xs:restriction base="xs:int">
+	      <xs:enumeration value="0" />
+	      <xs:enumeration value="1" />
+	      <xs:enumeration value="2" />
+	      <xs:enumeration value="3" />
+	    </xs:restriction>
+  	</xs:simpleType>
+  	
+	<xs:simpleType name="leadMechanism">
+	    <xs:annotation>
+	      <xs:appinfo>
+	        <jaxb:typesafeEnumClass>
+	            <jaxb:typesafeEnumMember value="sidebar" name="SIDEBAR" />
+	            <jaxb:typesafeEnumMember value="download" name="DOWNLOAD" />
+	            <jaxb:typesafeEnumMember value="player" name="PLAYER" />
+	        </jaxb:typesafeEnumClass>
+	      </xs:appinfo>
+	    </xs:annotation>
+	    <xs:restriction base="xs:string">
+	      <xs:enumeration value="sidebar" />
+	      <xs:enumeration value="download" />
+	      <xs:enumeration value="player" />
+	    </xs:restriction>
+  	</xs:simpleType>
+
+	<xs:simpleType name="campaignState">
+	    <xs:annotation>
+	      <xs:appinfo>
+	        <jaxb:typesafeEnumClass>
+	            <jaxb:typesafeEnumMember value="Running" name="RUNNING" />
+	            <jaxb:typesafeEnumMember value="Paused" name="PAUSED" />
+	            <jaxb:typesafeEnumMember value="Stopped" name="STOPPED" />
+	        </jaxb:typesafeEnumClass>
+	      </xs:appinfo>
+	    </xs:annotation>
+	    <xs:restriction base="xs:string">
+	      <xs:enumeration value="Running" />
+	      <xs:enumeration value="Paused" />
+	      <xs:enumeration value="Stopped" />
+	    </xs:restriction>
+  	</xs:simpleType>
+  	
+  	<xs:simpleType name="campaignPauseCause">
+	    <xs:annotation>
+	      <xs:appinfo>
+	        <jaxb:typesafeEnumClass>
+	            <jaxb:typesafeEnumMember value="userAction" name="USER_ACTION" />
+	            <jaxb:typesafeEnumMember value="dailyLimit" name="DAILY_LIMIT" />
+	            <jaxb:typesafeEnumMember value="noFund" name="NO_FUND" />
+	        </jaxb:typesafeEnumClass>
+	      </xs:appinfo>
+	    </xs:annotation>
+	    <xs:restriction base="xs:string">
+	      <xs:enumeration value="userAction" />
+	      <xs:enumeration value="dailyLimit" />
+	      <xs:enumeration value="noFund" />
+	    </xs:restriction>
+  	</xs:simpleType>
+  	
+  	<xs:complexType name="Tag">
+		<xs:simpleContent>
+	      <xs:extension base="xs:string">
+	        <xs:attribute name="Count" type="xs:long"/>
+			<xs:attribute name="Owner" type="xs:boolean"/>
+	      </xs:extension>
+	    </xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:complexType name="RelatedSlideshowID">
+		<xs:simpleContent>
+	      <xs:extension base="xs:string">
+	        <xs:attribute name="rank" type="xs:int"/>
+	      </xs:extension>
+	    </xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:complexType name="Tags">
+		<xs:sequence>
+			<xs:element name="Tag" minOccurs="0" maxOccurs="unbounded" type="Tag"/>
+		</xs:sequence>			
+	</xs:complexType>
+	
+	<xs:complexType name="RelatedSlideshows">
+		<xs:sequence>
+			<xs:element name="RelatedSlideshowID" minOccurs="0" maxOccurs="unbounded" type="RelatedSlideshowID" />
+		</xs:sequence>			
+	</xs:complexType>
+	
+	<xs:complexType name="SlideshowsByTag">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" />
+			<xs:element name="Count" type="xs:long" />
+			<xs:element name="Slideshow" minOccurs="0" maxOccurs="unbounded" type="Slideshow"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="SlideshowsByGroup">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" />
+			<xs:element name="Count" type="xs:long" />
+			<xs:element name="Slideshow" minOccurs="0" maxOccurs="unbounded" type="Slideshow"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="SlideshowsByUser">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" />
+			<xs:element name="Count" type="xs:long" />
+			<xs:element name="Slideshow" minOccurs="0" maxOccurs="unbounded" type="Slideshow"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="Meta">
+		<xs:sequence>
+			<xs:element name="Query" type="xs:string" />
+			<xs:element name="ResultOffset" type="xs:long" />
+			<xs:element name="NumResults" type="xs:long" />
+			<xs:element name="TotalResults" type="xs:long" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="Slideshows">
+		<xs:sequence>
+			<xs:element name="Meta" type="Meta" />
+			<xs:element name="Slideshow" minOccurs="0" maxOccurs="unbounded" type="Slideshow"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="Group">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" />
+			<xs:element name="NumPosts" type="xs:long" />
+			<xs:element name="NumSlideshows" type="xs:long" />
+			<xs:element name="NumMembers" type="xs:long" />
+			<xs:element name="Created" type="xs:date" />
+			<xs:element name="QueryName" type="xs:string" />
+			<xs:element name="URL" type="xs:string" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="Groups">
+		<xs:sequence>
+			<xs:element name="Group" type="Group" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="Contact">
+		<xs:sequence>
+			<xs:element name="Username" type="xs:string" />
+			<xs:element name="NumComments" type="xs:long" />
+			<xs:element name="NumSlideshows" type="xs:long" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="Contacts">
+		<xs:sequence>
+			<xs:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="SlideShowEdited">
+		<xs:sequence>
+			<xs:element name="SlideShowID" type="xs:string" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="SlideShowDeleted">
+		<xs:sequence>
+			<xs:element name="SlideShowID" type="xs:string" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="SlideShowUploaded">
+		<xs:sequence>
+			<xs:element name="SlideShowID" type="xs:string" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="SlideShowFavorited">
+		<xs:sequence>
+			<xs:element name="SlideShowID" type="xs:string" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="SlideShowIsFavorite">
+		<xs:sequence>
+			<xs:element name="SlideshowID" type="xs:string" />
+			<xs:element name="User" type="xs:string" />
+			<xs:element name="Favorited" type="xs:boolean" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="AmountWithCurrency">
+		<xs:simpleContent>
+	      <xs:extension base="xs:double">
+	        <xs:attribute name="currency" type="xs:string"/>
+	      </xs:extension>
+	    </xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:complexType name="LeadCampaign">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string" />
+			<xs:element name="Name" type="xs:string" />
+			<xs:element name="SlideshowId" type="xs:string" />
+			<xs:element name="ForTagged" type="xs:string" />
+			
+			<xs:element name="TargetedRegion" type="xs:string" />
+			<xs:element name="RequiresAddress" type="xs:boolean" />
+			<xs:element name="RequiresPhone" type="xs:boolean" />
+			
+			<xs:element name="CallToAction" type="xs:string" />
+			<xs:element name="OfferText" type="xs:string" />
+			<xs:element name="StartedAt" type="xs:date" />
+			<xs:element name="PausedAt" type="xs:date" />
+			<xs:element name="CreatedAt" type="xs:date" />
+			<xs:element name="UpdatedAt" type="xs:date" />
+			<xs:element name="EndedAt" type="xs:date" />
+			<xs:element name="MaximumDailySpend" type="AmountWithCurrency" />
+			<xs:element name="CostPerLead" type="AmountWithCurrency" />
+			<xs:element name="FormPosition" type="xs:string" />
+			<xs:element name="FormBlocking" type="xs:boolean" />
+			<xs:element name="ForDownload" type="xs:boolean" />
+			<xs:element name="ForSidebar" type="xs:boolean" />
+			<xs:element name="StateOfCampaign" type="campaignState" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="PromotionCampaign">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string" />
+			<xs:element name="Name" type="xs:string" />
+			<xs:element name="SlideshowId" type="xs:string" />
+			<xs:element name="ForTagged" type="xs:string" />
+			
+			<xs:element name="TargetedRegion" type="xs:string" />
+			
+			<xs:element name="SlideshareCategory" type="xs:string" />
+			<xs:element name="PromotionType" type="xs:string" />
+			<xs:element name="Cpc" type="AmountWithCurrency" />
+			<xs:element name="Ctr" type="xs:double" />
+			<xs:element name="StartedAt" type="xs:date" />
+			<xs:element name="PausedAt" type="xs:date" />
+			<xs:element name="CreatedAt" type="xs:date" />
+			<xs:element name="UpdatedAt" type="xs:date" />
+			<xs:element name="EndedAt" type="xs:date" />
+			<xs:element name="MaximumDailySpend" type="AmountWithCurrency" />
+			<xs:element name="ClicksToday" type="xs:int" />
+			<xs:element name="ClicksAlltime" type="xs:int" />
+			<xs:element name="ImpressionsToday" type="xs:long" />
+			<xs:element name="ForDownload" type="xs:long" />
+			<xs:element name="PauseCause" type="campaignPauseCause" />
+			<xs:element name="StateOfCampaign" type="campaignState" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="Campaigns">
+		<xs:sequence>
+			<xs:element name="LeadCampaign" type="LeadCampaign" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PromotionCampaign" type="PromotionCampaign" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="GeoData">
+		<xs:sequence>
+			<xs:element name="Region" type="xs:string" />
+			<xs:element name="City" type="xs:string" />
+			<xs:element name="Country" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+		
+	<xs:complexType name="Lead">
+		<xs:sequence>
+			<xs:element name="SlideshowId" type="xs:string" />
+			<xs:element name="Email" type="xs:string" />
+			<xs:element name="PhoneNo" type="xs:string" />
+			<xs:element name="Address" type="xs:string" />
+			<xs:element name="PaidAt" type="xs:date" />
+			<xs:element name="Rating" type="xs:int" />
+			<xs:element name="CreatedAt" type="xs:date" />
+			<xs:element name="UpdatedAt" type="xs:date" />
+			<xs:element name="ReadAt" type="xs:date" />
+			<xs:element name="DeletedAt" type="xs:date" />
+			<xs:element name="Message" type="xs:string" />
+			<xs:element name="UserComment" type="xs:string" />
+			<xs:element name="City" type="xs:string" />
+			<xs:element name="State" type="xs:string" />
+			<xs:element name="Country" type="xs:string" />
+			<xs:element name="Zipcode" type="xs:string" />
+			<xs:element name="Mechanism" type="leadMechanism" />
+			<xs:element name="LeadCampaignId" type="xs:string" />
+			<xs:element name="Cost" type="xs:double" />
+			<xs:element name="FirstName" type="xs:string" />
+			<xs:element name="LastName" type="xs:string" />
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="Leads">
+		<xs:sequence>
+			<xs:element name="Lead" type="Lead" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:complexType name="Message">
+		<xs:simpleContent>
+	      <xs:extension base="xs:string">
+	        <xs:attribute name="id" type="xs:int"/>
+	      </xs:extension>
+	    </xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="SlideShareServiceError">
+		<xs:sequence>
+			<xs:element name="Message" type="Message" />
+		</xs:sequence>
+	</xs:complexType>
+
+	
+	<xs:complexType name="Slideshow">
+		<xs:sequence>
+			<xs:element name="ID" type="xs:string" />
+			<xs:element name="Title" type="xs:string" />
+			<xs:element name="Description" type="xs:string" />
+			<xs:element name="Status" type="conversionStatus" />
+			<xs:element name="Username" type="xs:string" />
+			<xs:element name="URL" type="xs:string" />
+			<xs:element name="DownloadUrl" type="xs:string" />
+			<xs:element name="ThumbnailURL" type="xs:string" />
+			<xs:element name="ThumbnailSmallURL" type="xs:string" />
+			<xs:element name="Embed" type="xs:string" />
+			<xs:element name="Created" type="xs:date" />
+			<xs:element name="Updated" type="xs:date" />
+			<xs:element name="Language" type="xs:string" />
+			<xs:element name="Format" type="slideshowFormat" />
+			<xs:element name="Download" type="xs:boolean" />
+			<xs:element name="SlideshowType" type="slideshowType" />
+			<xs:element name="InContest" type="xs:boolean" />
+			<xs:element name="UserID" type="xs:string" />
+			<xs:element name="ExternalAppUserID" type="xs:string" />
+			<xs:element name="ExternalAppID" type="xs:string" />
+			<xs:element name="PPTLocation" type="xs:string" />
+			<xs:element name="StrippedTitle" type="xs:string" />
+			<xs:element name="Audio" type="xs:boolean" />
+			<xs:element name="NumDownloads" type="xs:long" />
+			<xs:element name="NumViews" type="xs:long" />
+			<xs:element name="NumComments" type="xs:long" />
+			<xs:element name="NumFavorites" type="xs:long" />
+			<xs:element name="NumSlides" type="xs:long" />
+			<xs:element name="PrivacyLevel" type="xs:boolean" />
+			<xs:element name="FlagVisible" type="xs:boolean" />
+			<xs:element name="ShowOnSS" type="xs:boolean" />
+			<xs:element name="SecretURL" type="xs:boolean" />
+			<xs:element name="AllowEmbed" type="xs:boolean" />
+			<xs:element name="ShareWithContacts" type="xs:boolean" />
+			<xs:element name="Tags" type="Tags"/>
+			<xs:element name="RelatedSlideshows" type="RelatedSlideshows"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
